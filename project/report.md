@@ -6,7 +6,7 @@ Red Hat OpensShift Container Platform
 
 하이브리드 클라우드로, 더 나은 애플리케이션을 더 빠르게 빌드하고 제공하기 위한 기업형 쿠버네티스 기반의 플랫폼
 
-![%E1%84%87%E1%85%A9%E1%84%80%E1%85%A9%E1%84%89%E1%85%A5%20cee7d3da839245b98bdfe59e818414eb/1.png](%E1%84%87%E1%85%A9%E1%84%80%E1%85%A9%E1%84%89%E1%85%A5%20cee7d3da839245b98bdfe59e818414eb/1.png)
+![openshift_architecture](https://github.com/FalcoN1995/project6/blob/master/images/1.png)
 
 ## 1.1 Red Hat OpenShift의 특징
 
