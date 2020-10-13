@@ -1,5 +1,34 @@
 # 보고서
 
+1. [OCP란 무엇인가?](#ocp란-무엇인가?)
+    1. [Red Hat OpenShift의 특징](#red-hat-openshift의-특징)
+2. [OCP 4.5 클러스터 아키텍처](#ocp-4.5-클러스터-아키텍처)
+    1. [Bootstrap](#bootstrap) 
+    2. [Master](#master)
+    3. [Worker](#worker)
+    4. [Bastion](#bastion)
+    5. [HAProxy](#haproxy)
+    6. [PXE](#pxe)
+        1. [DNS](#dns)
+        2. [DHCP](#dhcp)
+        3. [TFTP](#tftp)
+        4. [FTP, HTTP, NFS](#ftp,-http,-nfs)
+3. [Helper Node를 이용한 Bare-metal에 클러스터 구축](#helper-node를-이용한-bare-metal에-클러스터-구축)
+    1. [Helper Node](#helper-node)
+    2. [구축 과정 오류](#구축-과정-오류)
+    3. [최종 구축 과정](#최종-구축-과정)
+        1. [사전설정](#사전설정)
+	    2. [클러스터 아키텍처](#클러스터-아키텍처)
+	    3. [Helper Node 구성](#helper-node-구성)
+	        1. [Playbook 설정&실행](#playbook-설정&실행)
+	        2. [Ignition config 파일 생성](#ignition-config-파일-생성)
+	    4. [Bootstrap/Master/Worker Node 구성](#bootstrap/master/worker-node-구성)
+	        1. [물리머신에 각 Node의 가상머신 준비](#물리머신에-각-node의-가상머신-준비)
+	        2. [가상머신 설치](#가상머신-설치)
+    4. [클러스터 구성 완료 후 작업](#클러스터-구성-완료-후-작업)
+4. [서비스 소개](#서비스-소개)
+5. [서비스 구축과정](#서비스-구축과정)
+
 # 1. OCP란 무엇인가?
 
 Red Hat OpensShift Container Platform
