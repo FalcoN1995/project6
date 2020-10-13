@@ -619,7 +619,7 @@ sudo yum groupinstall -y "GNOME Desktop"
     oc whoami
     ```
 
-![service account](https://github.com/FalcoN1995/project6/blob/master/images/3.3.5.png)
+![service account](https://github.com/FalcoN1995/project6/blob/master/images/3.5.1.png)
 
 # 4. Service Introduction
 
