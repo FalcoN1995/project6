@@ -6,7 +6,7 @@ Red Hat OpensShift Container Platform
 
 하이브리드 클라우드로, 더 나은 애플리케이션을 더 빠르게 빌드하고 제공하기 위한 기업형 쿠버네티스 기반의 플랫폼
 
-![openshift_architecture](https://github.com/FalcoN1995/project6/blob/master/images/1.png)
+![openshift architecture](https://github.com/FalcoN1995/project6/blob/master/images/1.png)
 
 ## 1.1 Red Hat OpenShift의 특징
 
@@ -44,7 +44,7 @@ Red Hat OpensShift Container Platform
 
 OCP는 Master 노드에 필요한 정보를 제공하기 위한 초기 설정동안 일시적인 Bootstrap 노드를 사용한다. 클러스터를 어떻게 생성할지 명세한 Ignition config 파일을 이용해 부팅을 시작한다. Bootstrap 노드가 ignition config 파일을 바탕으로 Master 노드를 구성하고, Master 노드가 Worker 노드를 생성한다. Bootstrap 머신은 OS로 Red Hat CoreOS(RHCOS)를 사용한다.
 
-![%E1%84%87%E1%85%A9%E1%84%80%E1%85%A9%E1%84%89%E1%85%A5%20cee7d3da839245b98bdfe59e818414eb/2.1.png](%E1%84%87%E1%85%A9%E1%84%80%E1%85%A9%E1%84%89%E1%85%A5%20cee7d3da839245b98bdfe59e818414eb/2.1.png)
+![bootstrap](https://github.com/FalcoN1995/project6/blob/master/images/2.1.png)
 
 ## 2.2 Master (=Control plane machine)
 
@@ -297,7 +297,7 @@ KVM 안에서 발생하는 bridge
 
 ### 3.3.3 클러스터 아키텍처
 
-![%E1%84%87%E1%85%A9%E1%84%80%E1%85%A9%E1%84%89%E1%85%A5%20cee7d3da839245b98bdfe59e818414eb/3.3.3.png](%E1%84%87%E1%85%A9%E1%84%80%E1%85%A9%E1%84%89%E1%85%A5%20cee7d3da839245b98bdfe59e818414eb/3.3.3.png)
+![cluster architecture](https://github.com/FalcoN1995/project6/blob/master/images/3.3.3.png)
 
 ### 3.3.4 Helper Node 구성
 
@@ -465,7 +465,7 @@ RHCOS ISO Installer을 사용하여 인스턴스를 부팅한다.
 
 1. booting이 시작되면 boot menu에서 tab을 누른다.
 
-    ![%E1%84%87%E1%85%A9%E1%84%80%E1%85%A9%E1%84%89%E1%85%A5%20cee7d3da839245b98bdfe59e818414eb/3.3.5.png](%E1%84%87%E1%85%A9%E1%84%80%E1%85%A9%E1%84%89%E1%85%A5%20cee7d3da839245b98bdfe59e818414eb/3.3.5.png)
+![boot screen](https://github.com/FalcoN1995/project6/blob/master/images/3.3.5.png)
 
 2. 각 Node에 맞는 정적ip와 coreOS 설정을 한 줄로 입력한다. (각 필드는 space로 구분)
 
@@ -619,7 +619,7 @@ sudo yum groupinstall -y "GNOME Desktop"
     oc whoami
     ```
 
-![%E1%84%87%E1%85%A9%E1%84%80%E1%85%A9%E1%84%89%E1%85%A5%20cee7d3da839245b98bdfe59e818414eb/3.5.1.png](%E1%84%87%E1%85%A9%E1%84%80%E1%85%A9%E1%84%89%E1%85%A5%20cee7d3da839245b98bdfe59e818414eb/3.5.1.png)
+![service account](https://github.com/FalcoN1995/project6/blob/master/images/3.3.5.png)
 
 # 4. Service Introduction
 
@@ -627,7 +627,7 @@ sudo yum groupinstall -y "GNOME Desktop"
 
 ### 4.1.1 Architecture
 
-![%E1%84%87%E1%85%A9%E1%84%80%E1%85%A9%E1%84%89%E1%85%A5%20cee7d3da839245b98bdfe59e818414eb/4.0.png](%E1%84%87%E1%85%A9%E1%84%80%E1%85%A9%E1%84%89%E1%85%A5%20cee7d3da839245b98bdfe59e818414eb/4.0.png)
+![service architecture](https://github.com/FalcoN1995/project6/blob/master/images/4.0.png)
 
 ### 4.1.2 설명
 
