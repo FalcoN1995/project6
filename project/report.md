@@ -1,7 +1,7 @@
 # 보고서
 
-[1. OCP란 무엇인가?](#1-ocp란-무엇인가)<br>
-    [1.1 Red Hat OpenShift의 특징](#11-red-hat-openshift의-특징)<br>
+1. [1. OCP란 무엇인가?](#1-ocp란-무엇인가)<br>
+    1. [    1.1 Red Hat OpenShift의 특징](#11-red-hat-openshift의-특징)<br>
 [2. OCP 4.5 클러스터 아키텍처](#2-ocp-45-클러스터-아키텍처)<br>
     [2.1 Bootstrap](#21-bootstrap)<br>
     [2.2 Master](#22-master)<br>
@@ -114,11 +114,11 @@ OCP는 Master 노드에 필요한 정보를 제공하기 위한 초기 설정동
 
  Worker 노드는 사용자에 의해 요청된 실제 워크로드가 동작하고 관리되는 곳이다. CRI-O(컨테이너 엔진), kubelet(컨테이너의 워크로드의 동작과 정지 요청을 수용하고 만족시키는 서비스), 그리고 kube-proxy(파드와 Worker 간의 의사소통을 관리)와 같은 중요한 서비스들이 각 Worker 노드에서 작동한다. Worker 역할의 머신들은 autoscale되는 명세된 머신 풀에 의해 관리되는 컴퓨팅 워크로드를 구동한다. Compute 머신에는 운영체제로 RHCOS 뿐만 아니라 Red Hat Enterprise Linux(RHEL)도 사용 할 수 있다.
 
-## 2.4 Bastion Host
+## 2.4 Bastion
 
  OpenShift 클러스터의 주요 배포&관리 서버 역할을 수행하도록 배정된 노드이다. 클러스터의 관리자 시스템 배포와 기능 관리를 수행하기 위한 로그온 노드로 사용된다. OCP의 수동 또는 자동 배포를 위한 OpenShift 설치 파일이 Bastion 노드에서 동작한다. Bastion 노드는 리눅스 KVM 패키지가 설치된 RHEL 8.1에서 동작한다.
 
-## 2.5 HA Proxy
+## 2.5 HAProxy
 
  OpenShift Load Balance 노드는 Keepalived와 HAProxy 라우터와 같은 로드밸런싱 서비스를 작동시킨다. HAProxy 라우터는 OpenShift 애플리케이션에 라우팅 기능을 제공한다. 최근에는 Server Name Indication (SNI)를 이용한 HTTP(S) 트래픽과 TLS-enabled 트래픽을 지원한다. OpenShift Load Balance 노드에 추가적인 애플리케이션과 서비스를 배포될 수 있다. OpenShift Load Balance 노드는 RHEL 8.1 서버를 실행한다.
 
