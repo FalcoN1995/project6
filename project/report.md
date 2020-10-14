@@ -2,7 +2,7 @@
 
 [1. OCP란 무엇인가?](#1-ocp란-무엇인가)<br>
     [1.1 Red Hat OpenShift의 특징](#11-red-hat-openshift의-특징)<br>
-[2. OCP 4.5 클러스터 아키텍처](#2-ocp-4.5-클러스터-아키텍처)<br>
+[2. OCP 4.5 클러스터 아키텍처](#2-ocp-45-클러스터-아키텍처)<br>
     [2.1 Bootstrap](#21-bootstrap)<br>
     [2.2 Master](#22-master)<br>
     [2.3 Worker](#23-worker)<br>
