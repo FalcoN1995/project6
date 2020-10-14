@@ -130,7 +130,7 @@ OCP는 Master 노드에 필요한 정보를 제공하기 위한 초기 설정동
 
 ### 2.6.3 TFTP
 
-### 2.6.4 FTP, HTTP/NFS
+### 2.6.4 FTP, HTTP, NFS
 
 # 3. Helper Node를 이용한 Bare-Metal에 클러스터 구축
 
