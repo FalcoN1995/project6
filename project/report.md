@@ -1,18 +1,19 @@
 # 보고서
 
-[1. OCP란 무엇인가?](#1-ocp란-무엇인가?)
-    [1.1 Red Hat OpenShift의 특징](#11-red-hat-openshift의-특징)
-[2. OCP 4.5 클러스터 아키텍처](#2-ocp-4.5-클러스터-아키텍처)
-    [2.1 Bootstrap](#21-bootstrap) 
-    [2.2 Master](#22-master)
-    [2.3 Worker](#23-worker)
-    [2.4 Bastion](#24-bastion)
-    [2.5 HAProxy](#25-haproxy)
-    [2.6 PXE](#26-pxe)
-        [2.6.1 DNS](#261-dns)
-        [2.6.2 DHCP](#262-dhcp)
-        [2.6.3 TFTP](#263-tftp)
+[1. OCP란 무엇인가?](#1-ocp란-무엇인가?)<br>
+    [1.1 Red Hat OpenShift의 특징](#11-red-hat-openshift의-특징)<br>
+[2. OCP 4.5 클러스터 아키텍처](#2-ocp-4.5-클러스터-아키텍처)<br>
+    [2.1 Bootstrap](#21-bootstrap)<br>
+    [2.2 Master](#22-master)<br>
+    [2.3 Worker](#23-worker)<br>
+    [2.4 Bastion](#24-bastion)<br>
+    [2.5 HAProxy](#25-haproxy)<br>
+    [2.6 PXE](#26-pxe)<br>
+        [2.6.1 DNS](#261-dns)<br>
+        [2.6.2 DHCP](#262-dhcp)<br>
+        [2.6.3 TFTP](#263-tftp)<br>
         [2.6.4 FTP, HTTP, NFS](#264-ftp-http-nfs)
+
 [3. Helper Node를 이용한 Bare-metal에 클러스터 구축](#3-helper-node를-이용한-bare-metal에-클러스터-구축)
     [3.1 Helper Node](#31-helper-node)
     [3.2 구축 과정 오류](#32-구축-과정-오류)
