@@ -1,8 +1,8 @@
 # 보고서
 
-1. [1. OCP란 무엇인가?](#1-ocp란-무엇인가)<br>
-    1. [    1.1 Red Hat OpenShift의 특징](#11-red-hat-openshift의-특징)<br>
-[2. OCP 4.5 클러스터 아키텍처](#2-ocp-45-클러스터-아키텍처)<br>
+1. [OCP란 무엇인가?](#1-ocp란-무엇인가)<br>
+    [1.1 Red Hat OpenShift의 특징](#11-red-hat-openshift의-특징)<br>
+2. [OCP 4.5 클러스터 아키텍처](#2-ocp-45-클러스터-아키텍처)<br>
     [2.1 Bootstrap](#21-bootstrap)<br>
     [2.2 Master](#22-master)<br>
     [2.3 Worker](#23-worker)<br>
@@ -12,47 +12,46 @@
         [2.6.1 DNS](#261-dns)<br>
         [2.6.2 DHCP](#262-dhcp)<br>
         [2.6.3 TFTP](#263-tftp)<br>
-        [2.6.4 FTP, HTTP, NFS](#264-ftp-http-nfs)
-
-[3. Helper Node를 이용한 Bare-metal에 클러스터 구축](#3-helper-node를-이용한-bare-metal에-클러스터-구축)
-    [3.1 Helper Node](#31-helper-node)
-    [3.2 구축 과정 오류](#32-구축-과정-오류)
-        [3.2.1 Bare-metal에 구축 불가](#321-bare-metal에-구축-불가)
-        [3.2.2 Wi-Fi 접속 불가](#322-wi-fi-접속-불가)
-        [3.2.3 DHCP Issue](#323-dhcp-issue)
-        [3.2.4 KVM Bridge Issue](#324-kvm-bridge-issue)
-        [3.2.5 DNS Issue](#325-dns-issue)
-    [3.3 최종 구축 과정](#33-최종-구축-과정)
-        [3.3.1 물리머신 환경](#331-믈리머신-환경)
-        [3.3.2 가상머신 환경](#332-가상머신-환경)
-	[3.3.3 클러스터 아키텍처](#333-클러스터-아키텍처)
-	[3.3.4 Helper Node 구성](#334-helper-node-구성)
-	        [Playbook 설정&실행](#playbook-설정실행)
-	        [Ignition config 파일 생성](#ignition-config-파일-생성)
-	[3.3.5 Bootstrap/Master/Worker Node 구성](#335-bootstrapmasterworker-node-구성)
-	        [물리머신에 각 Node의 가상머신 준비](#물리머신에-각-node의-가상머신-준비)
-	        [가상머신 설치](#가상머신-설치)
-    [3.4 클러스터 구성 완료 후 작업](#34-클러스터-구성-완료-후-작업)
-        [Web console에 Login](#web-console에-login)
-	[기본적인 openshift setting](#기본적인-openshift-setting)
-[4. 서비스 소개](#4-서비스-소개)
-    [서비스 아키텍처](#서비스-아키텍처)
-[5 서비스 구축과정](#5-서비스-구축과정)
-    [5.1 Jupyter Notebook](#51-jupyter-notebook)
-        [5.1.1 Importing Minimal Notebook](#511-importing-minimal-notebook)
-        [5.1.2 Making Minimal Notebook](#512-making-minimal-notebook)
-        [5.1.3 Deploying Minimal Notebook](#513-deploying-minimal-notebook)
-    [5.2 Create the metric](#52-create-the-metric)
-        [5.2.1 Data analysis Using kaggle data](#521-data-analysis-using-kaggle-data)
-    [5.3 Prometheus](#53-prometheus)
-        [5.3.1 Prometheus metric library](#531-prometheus-metric-library)
-        [5.3.2 Prometheus metric extraction](#532-prometheus-metric-extraction)
-        [5.3.3 Install Library](#533-install-library)
-    [5.4 automation](#54-automation)
-    [5.5 metric pdf](#55-metric-pdf)
-    [5.6 merge with watermark](#56-merge-with-watermark)
-    [5.7 gui 환경 설정](#57-gui-환경-설정)
-[6. 서비스 시연 결과물](#6-서비스-시연-결과물)
+        [2.6.4 FTP, HTTP, NFS](#264-ftp-http-nfs)<br>
+3. [Helper Node를 이용한 Bare-metal에 클러스터 구축](#3-helper-node를-이용한-bare-metal에-클러스터-구축)<br>
+    [3.1 Helper Node](#31-helper-node)<br>
+    [3.2 구축 과정 오류](#32-구축-과정-오류)<br>
+        [3.2.1 Bare-metal에 구축 불가](#321-bare-metal에-구축-불가)<br>
+        [3.2.2 Wi-Fi 접속 불가](#322-wi-fi-접속-불가)<br>
+        [3.2.3 DHCP Issue](#323-dhcp-issue)<br>
+        [3.2.4 KVM Bridge Issue](#324-kvm-bridge-issue)<br>
+        [3.2.5 DNS Issue](#325-dns-issue)<br>
+    [3.3 최종 구축 과정](#33-최종-구축-과정)<br>
+        [3.3.1 물리머신 환경](#331-믈리머신-환경)<br>
+        [3.3.2 가상머신 환경](#332-가상머신-환경)<br>
+	[3.3.3 클러스터 아키텍처](#333-클러스터-아키텍처)<br>
+	[3.3.4 Helper Node 구성](#334-helper-node-구성)<br>
+	        [Playbook 설정&실행](#playbook-설정실행)<br>
+	        [Ignition config 파일 생성](#ignition-config-파일-생성)<br>
+	[3.3.5 Bootstrap/Master/Worker Node 구성](#335-bootstrapmasterworker-node-구성)<br>
+	        [물리머신에 각 Node의 가상머신 준비](#물리머신에-각-node의-가상머신-준비)<br>
+	        [가상머신 설치](#가상머신-설치)<br>
+    [3.4 클러스터 구성 완료 후 작업](#34-클러스터-구성-완료-후-작업)<br>
+        [Web console에 Login](#web-console에-login)<br>
+	[기본적인 openshift setting](#기본적인-openshift-setting)<br>
+4. [서비스 소개](#4-서비스-소개)<br>
+    [서비스 아키텍처](#서비스-아키텍처)<br>
+5. [서비스 구축과정](#5-서비스-구축과정)<br>
+    [5.1 Jupyter Notebook](#51-jupyter-notebook)<br>
+        [5.1.1 Importing Minimal Notebook](#511-importing-minimal-notebook)<br>
+        [5.1.2 Making Minimal Notebook](#512-making-minimal-notebook)<br>
+        [5.1.3 Deploying Minimal Notebook](#513-deploying-minimal-notebook)<br>
+    [5.2 Create the metric](#52-create-the-metric)<br>
+        [5.2.1 Data analysis Using kaggle data](#521-data-analysis-using-kaggle-data)<br>
+    [5.3 Prometheus](#53-prometheus)<br>
+        [5.3.1 Prometheus metric library](#531-prometheus-metric-library)<br>
+        [5.3.2 Prometheus metric extraction](#532-prometheus-metric-extraction)<br>
+        [5.3.3 Install Library](#533-install-library)<br>
+    [5.4 automation](#54-automation)<br>
+    [5.5 metric pdf](#55-metric-pdf)<br>
+    [5.6 merge with watermark](#56-merge-with-watermark)<br>
+    [5.7 gui 환경 설정](#57-gui-환경-설정)<br>
+6. [서비스 시연 결과물](#6-서비스-시연-결과물)
 
 # 1. OCP란 무엇인가?
 
