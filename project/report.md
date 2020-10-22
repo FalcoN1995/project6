@@ -1,7 +1,7 @@
 # 보고서
 
 1. [OCP란 무엇인가?](#1-ocp란-무엇인가)<br>
-    [1.1 Red Hat OpenShift의 특징](#11-red-hat-openshift의-특징)<br>
+    1. [Red Hat OpenShift의 특징](#11-red-hat-openshift의-특징)<br>
 2. [OCP 4.5 클러스터 아키텍처](#2-ocp-45-클러스터-아키텍처)<br>
     1. [Bootstrap](#21-bootstrap)<br>
     2. [Master](#22-master)<br>
@@ -10,12 +10,12 @@
     5. [HAProxy](#25-haproxy)<br>
     6. [PXE](#26-pxe)<br>
         1. [DNS](#261-dns)<br>
-        2. [2.6.2 DHCP](#262-dhcp)<br>
-        3. [2.6.3 TFTP](#263-tftp)<br>
-        4. [2.6.4 FTP, HTTP, NFS](#264-ftp-http-nfs)<br>
+        2. [DHCP](#262-dhcp)<br>
+        3. [TFTP](#263-tftp)<br>
+        4. [FTP, HTTP, NFS](#264-ftp-http-nfs)<br>
 3. [Helper Node를 이용한 Bare-metal에 클러스터 구축](#3-helper-node를-이용한-bare-metal에-클러스터-구축)<br>
-    1. [3.1 Helper Node](#31-helper-node)<br>
-    2. [3.2 구축 과정 오류](#32-구축-과정-오류)<br>
+    1. [Helper Node](#31-helper-node)<br>
+    2. [구축 과정 오류](#32-구축-과정-오류)<br>
         1. [Bare-metal에 구축 불가](#321-bare-metal에-구축-불가)<br>
         2. [Wi-Fi 접속 불가](#322-wi-fi-접속-불가)<br>
         3. [DHCP Issue](#323-dhcp-issue)<br>
@@ -40,17 +40,17 @@
     1. [Jupyter Notebook](#51-jupyter-notebook)<br>
         1. [Importing Minimal Notebook](#511-importing-minimal-notebook)<br>
         2. [Making Minimal Notebook](#512-making-minimal-notebook)<br>
-        [5.1.3 Deploying Minimal Notebook](#513-deploying-minimal-notebook)<br>
-    [5.2 Create the metric](#52-create-the-metric)<br>
-        [5.2.1 Data analysis Using kaggle data](#521-data-analysis-using-kaggle-data)<br>
-    [5.3 Prometheus](#53-prometheus)<br>
-        [5.3.1 Prometheus metric library](#531-prometheus-metric-library)<br>
-        [5.3.2 Prometheus metric extraction](#532-prometheus-metric-extraction)<br>
-        [5.3.3 Install Library](#533-install-library)<br>
-    [5.4 automation](#54-automation)<br>
-    [5.5 metric pdf](#55-metric-pdf)<br>
-    [5.6 merge with watermark](#56-merge-with-watermark)<br>
-    [5.7 gui 환경 설정](#57-gui-환경-설정)<br>
+        3. [Deploying Minimal Notebook](#513-deploying-minimal-notebook)<br>
+    2. [Create the metric](#52-create-the-metric)<br>
+        1. [Data analysis Using kaggle data](#521-data-analysis-using-kaggle-data)<br>
+    3. [Prometheus](#53-prometheus)<br>
+        1. [Prometheus metric library](#531-prometheus-metric-library)<br>
+        2. [Prometheus metric extraction](#532-prometheus-metric-extraction)<br>
+        3. [Install Library](#533-install-library)<br>
+    4. [automation](#54-automation)<br>
+    5. [metric pdf](#55-metric-pdf)<br>
+    6. [merge with watermark](#56-merge-with-watermark)<br>
+    7. [gui 환경 설정](#57-gui-환경-설정)<br>
 6. [서비스 시연 결과물](#6-서비스-시연-결과물)
 
 # 1. OCP란 무엇인가?
