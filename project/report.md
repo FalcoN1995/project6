@@ -144,6 +144,8 @@ OCP는 Master 노드에 필요한 정보를 제공하기 위한 초기 설정동
 
 OpenShift 4 클러스터를 구축하기위해 필요한 모든 서비스가 함축된 "All in One" 노드. 플레이북 하나로 간단하게 구축
 
+![helper node architecture](https://github.com/FalcoN1995/project6/blob/master/images/hn.png)
+
 > 최소 요구사항
 > - CentOS/RHEL 7 or 8
 > - 50 GB disk
