@@ -678,7 +678,7 @@ sudo yum groupinstall -y "GNOME Desktop"
 
 # 4. Service Introduction
 
-Openshift의 prometheu의 metirc값으로 사용량을 측정하고 PaaS의 사용량을 토대로 비용계산을 하여 자동으로 pdf 고지서를 만드는 서비스를 개발한다.
+Openshift의 Prometheus의 metirc값으로 PaaS의 사용량을 측정하고 이를 토대로 비용을 계산, 자동으로 pdf 고지서를 만드는 서비스를 개발
 
 ## 서비스 아키텍처
 
