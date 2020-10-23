@@ -1,57 +1,33 @@
 # 보고서
 
-1. [OCP란 무엇인가?](#1-ocp란-무엇인가)<br>
-    1. [Red Hat OpenShift의 특징](#11-red-hat-openshift의-특징)<br>
-2. [OCP 4.5 클러스터 아키텍처](#2-ocp-45-클러스터-아키텍처)<br>
-    1. [Bootstrap](#21-bootstrap)<br>
-    2. [Master](#22-master)<br>
-    3. [Worker](#23-worker)<br>
-    4. [Bastion](#24-bastion)<br>
-    5. [HAProxy](#25-haproxy)<br>
-    6. [PXE](#26-pxe)<br>
-        1. [DNS](#261-dns)<br>
-        2. [DHCP](#262-dhcp)<br>
-        3. [TFTP](#263-tftp)<br>
-        4. [FTP, HTTP, NFS](#264-ftp-http-nfs)<br>
-3. [Helper Node를 이용한 Bare-metal에 클러스터 구축](#3-helper-node를-이용한-bare-metal에-클러스터-구축)<br>
-    1. [Helper Node](#31-helper-node)<br>
-    2. [구축 과정 오류](#32-구축-과정-오류)<br>
-        1. [Bare-metal에 구축 불가](#321-bare-metal에-구축-불가)<br>
-        2. [Wi-Fi 접속 불가](#322-wi-fi-접속-불가)<br>
-        3. [DHCP Issue](#323-dhcp-issue)<br>
-        4. [KVM Bridge Issue](#324-kvm-bridge-issue)<br>
-        5. [DNS Issue](#325-dns-issue)<br>
-    3. [최종 구축 과정](#33-최종-구축-과정)<br>
-        1. [물리머신 환경](#331-믈리머신-환경)<br>
-        2. [가상머신 환경](#332-가상머신-환경)<br>
-	3. [클러스터 아키텍처](#333-클러스터-아키텍처)<br>
-	4. [Helper Node 구성](#334-helper-node-구성)<br>
-	        1. [Playbook 설정&실행](#playbook-설정실행)<br>
-	        2. [Ignition config 파일 생성](#ignition-config-파일-생성)<br>
-	5. [Bootstrap/Master/Worker Node 구성](#335-bootstrapmasterworker-node-구성)<br>
-	        1. [물리머신에 각 Node의 가상머신 준비](#물리머신에-각-node의-가상머신-준비)<br>
-	        2. [가상머신 설치](#가상머신-설치)<br>
-    4. [클러스터 구성 완료 후 작업](#34-클러스터-구성-완료-후-작업)<br>
-        1. [Web console에 Login](#web-console에-login)<br>
-	2. [기본적인 openshift setting](#기본적인-openshift-setting)<br>
-4. [서비스 소개](#4-서비스-소개)<br>
-    1. [서비스 아키텍처](#서비스-아키텍처)<br>
-5. [서비스 구축과정](#5-서비스-구축과정)<br>
-    1. [Jupyter Notebook](#51-jupyter-notebook)<br>
-        1. [Importing Minimal Notebook](#511-importing-minimal-notebook)<br>
-        2. [Making Minimal Notebook](#512-making-minimal-notebook)<br>
-        3. [Deploying Minimal Notebook](#513-deploying-minimal-notebook)<br>
-    2. [Create the metric](#52-create-the-metric)<br>
-        1. [Data analysis Using kaggle data](#521-data-analysis-using-kaggle-data)<br>
-    3. [Prometheus](#53-prometheus)<br>
-        1. [Prometheus metric library](#531-prometheus-metric-library)<br>
-        2. [Prometheus metric extraction](#532-prometheus-metric-extraction)<br>
-        3. [Install Library](#533-install-library)<br>
-    4. [automation](#54-automation)<br>
-    5. [metric pdf](#55-metric-pdf)<br>
-    6. [merge with watermark](#56-merge-with-watermark)<br>
-    7. [gui 환경 설정](#57-gui-환경-설정)<br>
-6. [서비스 시연 결과물](#6-서비스-시연-결과물)
+[1. OCP란 무엇인가?](#1.-ocp란-무엇인가?)
+    [1.1 Red Hat OpenShift의 특징](#1.1-red-hat-openshift의-특징)
+[2. OCP 4.5 클러스터 아키텍처](#ocp-4.5-클러스터-아키텍처)
+    [Bootstrap](#bootstrap) 
+    [Master](#master)
+    [Worker](#worker)
+    [Bastion](#bastion)
+    [HAProxy](#haproxy)
+    [PXE](#pxe)
+        [DNS](#dns)
+        [DHCP](#dhcp)
+        [TFTP](#tftp)
+        [FTP, HTTP, NFS](#ftp,-http,-nfs)
+[Helper Node를 이용한 Bare-metal에 클러스터 구축](#helper-node를-이용한-bare-metal에-클러스터-구축)
+    [Helper Node](#helper-node)
+    [구축 과정 오류](#구축-과정-오류)
+    [최종 구축 과정](#최종-구축-과정)
+        [사전설정](#사전설정)
+	    [클러스터 아키텍처](#클러스터-아키텍처)
+	    [Helper Node 구성](#helper-node-구성)
+	        [Playbook 설정&실행](#playbook-설정&실행)
+	        [Ignition config 파일 생성](#ignition-config-파일-생성)
+	    [Bootstrap/Master/Worker Node 구성](#bootstrap/master/worker-node-구성)
+	        [물리머신에 각 Node의 가상머신 준비](#물리머신에-각-node의-가상머신-준비)
+	        2. [가상머신 설치](#가상머신-설치)
+    4. [클러스터 구성 완료 후 작업](#클러스터-구성-완료-후-작업)
+4. [서비스 소개](#서비스-소개)
+5. [서비스 구축과정](#서비스-구축과정)
 
 # 1. OCP란 무엇인가?
 
@@ -99,56 +75,70 @@ OCP는 Master 노드에 필요한 정보를 제공하기 위한 초기 설정동
 
 ![bootstrap](https://github.com/FalcoN1995/project6/blob/master/images/2.1.png)
 
-## 2.2 Master 
+## 2.2 Master (=Control plane machine)
 
- Control plane 역할을 하는 모든 머신들이 Master 머신들이기 때문에, 용어를 설명하는데 'Master'와 'Control plane'은 같은 의미의 용어로 사용된다.
+Control plane 역할을 하는 모든 머신들이 Master 머신들이기 때문에, 용어를 설명하는데 'Master'와 'Control plane'은 같은 의미의 용어로 사용된다.
 
- Master 노드는 전체 클러스터 환경의 제어기능을 수행하는 서버이다. OpenShift와 관련된 모든 오브젝트의 생성 및 관리, 스케줄링을 담당한다. 클러스터를 관리하기 위한 Kubernetes 서비스들(API 서버, etcd, Controller Manager 서버 등)을 하나의 OpenShift 바이너리에 포함한다. OCP 4.5의 모든 Control plane 머신에는 운영체제로 반드시 RHCOS를 사용해야한다.
+Master 노드는 전체 클러스터 환경의 제어기능을 수행하는 서버이다. OpenShift와 관련된 모든 오브젝트의 생성 및 관리, 스케줄링을 담당한다. 클러스터를 관리하기 위한 Kubernetes 서비스들(API 서버, etcd, Controller Manager 서버 등)을 하나의 OpenShift 바이너리에 포함한다. OCP 4.5의 모든 Control plane 머신에는 운영체제로 반드시 RHCOS를 사용해야한다.
 
-> 3대의 Master 노드를 사용한다. 비록 이론적으로 어떤 수의 master 노드를 사용 가능하더라도, master의 static 파드와 etcd static 파드가 같은 호스트에서 작동하기에 etcd 쿼럼에 의해 그 수가 제한된다.
+3대의 Master 노드를 사용한다. 비록 이론적으로 어떤 수의 master 노드를 사용 가능하더라도, master의 static 파드와 etcd static 파드가 같은 호스트에서 작동하기에 etcd 쿼럼에 의해 그 수가 제한된다.
 
-## 2.3 Worker
+## 2.3 Worker (=Compute machine)
 
- OCP 4.5 릴리스에서 Compute 머신의 유일한 기본 유형이 Worker 머신이기 때문에 'Worker 머신'과 'Compute 머신' 은 같은 의미로 사용된다.
+Worker 노드는 사용자에 의해 요청된 실제 워크로드가 동작하고 관리되는 곳이다. CRI-O(컨테이너 엔진), kubelet(컨테이너의 워크로드의 동작과 정지 요청을 수용하고 만족시키는 서비스), 그리고 kube-proxy(파드와 Worker 간의 의사소통을 관리)와 같은 중요한 서비스들이 각 Worker 노드에서 작동한다. Worker 역할의 머신들은 autoscale되는 명세된 머신 풀에 의해 관리되는 컴퓨팅 워크로드를 구동한다. OCP가 여러 머신 종류를 지원하기 때문에 Worker 머신들은 Compute 머신으로 분류된다. 4.5 릴리스에서 Compute 머신의 유일한 기본 유형이 Worker 머신이기 때문에 'Worker 머신'과 'Compute 머신' 은 같은 의미로 사용된다. Compute 머신에는 운영체제로 RHCOS 뿐만 아니라 Red Hat Enterprise Linux(RHEL)도 사용 할 수 있다.
 
- Worker 노드는 사용자에 의해 요청된 실제 워크로드가 동작하고 관리되는 곳이다. CRI-O(컨테이너 엔진), kubelet(컨테이너의 워크로드의 동작과 정지 요청을 수용하고 만족시키는 서비스), 그리고 kube-proxy(파드와 Worker 간의 의사소통을 관리)와 같은 중요한 서비스들이 각 Worker 노드에서 작동한다. Worker 역할의 머신들은 autoscale되는 명세된 머신 풀에 의해 관리되는 컴퓨팅 워크로드를 구동한다. Compute 머신에는 운영체제로 RHCOS 뿐만 아니라 Red Hat Enterprise Linux(RHEL)도 사용 할 수 있다.
+## 2.4 Bastion Host
 
-## 2.4 Bastion
+OpenShift 클러스터의 주요 배포&관리 서버 역할을 수행하도록 배정된 노드이다.
 
- OpenShift 클러스터의 주요 배포&관리 서버 역할을 수행하도록 배정된 노드이다. 클러스터의 관리자 시스템 배포와 기능 관리를 수행하기 위한 로그온 노드로 사용된다. OCP의 수동 또는 자동 배포를 위한 OpenShift 설치 파일이 Bastion 노드에서 동작한다. Bastion 노드는 리눅스 KVM 패키지가 설치된 RHEL 8.1에서 동작한다.
+클러스터의 관리자 시스템 배포와 기능 관리를 수행하기 위한 로그온 노드로 사용된다.
 
-## 2.5 HAProxy
+OCP의 수동 또는 자동 배포를 위한 OpenShift 설치 파일이 Bastion 노드에서 동작한다.
 
- OpenShift Load Balance 노드는 Keepalived와 HAProxy 라우터와 같은 로드밸런싱 서비스를 작동시킨다. HAProxy 라우터는 OpenShift 애플리케이션에 라우팅 기능을 제공한다. 최근에는 Server Name Indication (SNI)를 이용한 HTTP(S) 트래픽과 TLS-enabled 트래픽을 지원한다. OpenShift Load Balance 노드에 추가적인 애플리케이션과 서비스를 배포될 수 있다. OpenShift Load Balance 노드는 RHEL 8.1 서버를 실행한다.
+Bastion 노드는 리눅스 KVM 패키지가 설치된 RHEL 8.1에서 동작한다.
+
+## 2.5 HA Proxy
+
+OpenShift Load Balance 노드는 Keepalived와 HAProxy 라우터와 같은 로드밸런싱 서비스를 작동시킨다.
+
+HAProxy 라우터는 OpenShift 애플리케이션에 라우팅 기능을 제공한다.
+
+최근에는 Server Name Indication (SNI)를 이용한 HTTP(S) 트래픽과 TLS-enabled 트래픽을 지원한다.
+
+OpenShift Load Balance 노드에 추가적인 애플리케이션과 서비스를 배포될 수 있다.
+
+OpenShift Load Balance 노드는 RHEL 8.1 서버를 실행한다.
 
 ## 2.6 PXE
 
-### 2.6.1 DNS
+2.6.1 DNS
 
-### 2.6.2 DHCP
+2.6.2 DHCP
 
-### 2.6.3 TFTP
+2.6.3 TFTP
 
-### 2.6.4 FTP, HTTP, NFS
+2.6.4 FTP, HTTP/NFS
 
 # 3. Helper Node를 이용한 Bare-Metal에 클러스터 구축
 
-> 물리머신 환경
-> - Ubuntu 18.04
-> - 500 GB disk
-> - 8 vCPUs
-> - 20 GB of RAM
-> - 192.168.20.0/24 (wifi)
+## 3.0 물리 머신 환경
+
+- Ubuntu 18.04
+- 500 GB disk
+- 8 vCPUs
+- 20 GB of RAM
+- 192.168.20.0/24 (wifi)
 
 ## 3.1 Helper Node
 
 OpenShift 4 클러스터를 구축하기위해 필요한 모든 서비스가 함축된 "All in One" 노드. 플레이북 하나로 간단하게 구축
 
-> 최소 요구사항
-> - CentOS/RHEL 7 or 8
-> - 50 GB disk
-> - 4 vCPUs
-> - 8 GB of RAM
+### 최소 요구사항
+
+- CentOS/RHEL 7 or 8
+- 50 GB disk
+- 4 vCPUs
+- 8 GB of RAM
 
 ## 3.2 구축 절차 오류 과정
 
@@ -301,7 +291,9 @@ KVM 안에서 발생하는 bridge
 
 ## 3.3 최종 구축 과정&결과
 
-### 3.3.1 물리머신 환경
+### 사전 설정
+
+### 3.3.1 물리 머신 환경
 
 - Ubuntu 18.04
 - virt-manager 설치
@@ -328,24 +320,9 @@ KVM 안에서 발생하는 bridge
 
 ### 3.3.2 가상머신 환경
 
-<최소 요구사항>
-|    Node   |     Operating SYS    | vCPUs |   RAM  | Disk Storage |
-|:---------:|:--------------------:|:-----:|:------:|:------------:|
-| Helper    | CentOS/RHEL 7 or 8   | 4     |   8 GB | 50 GB        |
-| Bootstrap | RHCOS                | 4     | 16 GB  | 120 GB       |
-| Master    | RHCOS                | 4     | 16 GB  | 120 GB       |
-| Worker    | RHCOS or RHEL 7 or 8 | 2     |   8 GB | 120 GB       |
+[최소 요구 사항](https://www.notion.so/802750e76c904f28a1cd93d48837a070)
 
-<IP 주소 설정>
-|   Node   |   IP address    |
-|:---------|:----------------|
-|Helper    |192.168.20.111   |
-|Bootstrap |192.168.20.150   |
-|Master0   |192.168.20.151   |
-|Master1   |192.168.20.152   |
-|Master2   |192.168.20.153   |
-|Worker0   |192.168.20.161   |
-|Worker1   |192.168.20.162   |
+[IP 주소 설정](https://www.notion.so/0ce1a014f50b4c2c92d104ae347e935f)
 
 ### 3.3.3 클러스터 아키텍처
 
@@ -355,7 +332,7 @@ KVM 안에서 발생하는 bridge
 
 Helper에 dns를 패키지를 설치하는 등 외부접속이 필요한 때는 공인 IP를 넣어주고 이후에는 자신의 IP 주소를 넣어준다. Node가 부팅 시 dns를 따라가 파일을 불러오기 때문
 
-#### Playbook 설정&실행
+### Playbook 설정&실행
 
 1. 필요 패키지 설치
 
@@ -413,7 +390,7 @@ Helper에 dns를 패키지를 설치하는 등 외부접속이 필요한 때는 
 플레이북 실행 후 Helper Node의 리소스가 제대로 생성되었는지 확인하는 helpernodecheck 명령어
 /usr/local/bin/helpernodecheck 로 확인
 
-#### Ignition config 파일 생성
+### Ignition config 파일 생성
 
 1. 작업 디렉토리 생성&이동
 
@@ -504,18 +481,16 @@ Helper에 dns를 패키지를 설치하는 등 외부접속이 필요한 때는 
 
 ### 3.3.5 Bootstrap/Master/Worker Node 구성
 
-#### 물리머신에 각 Node의 가상머신 준비
+### 물리머신에 각 Node의 가상머신 준비
 
 - 모든 물리&가상머신은 동일한 무선 네트워크 대역(192.168.20.0) 사용
 - 물리머신의 무선 네트워크를 가상머신의 bridge로 연결 (NIC : virtio)
 - IP주소를 정적으로 설정
 - Bootstrap -> Master -> Worker 순으로 가상머신 Set Up
 
-#### 가상머신 설치
+### 가상머신 설치
 
 RHCOS ISO Installer을 사용하여 인스턴스를 부팅한다.
-
-![installation screen](https://github.com/FalcoN1995/project6/blob/master/images/installation.png)
 
 1. booting이 시작되면 boot menu에서 tab을 누른다.
 
@@ -594,17 +569,18 @@ Master Node가 모두 올라오면 Bootstrap Node를 삭제해도 된다.
     openshift-install wait-for install-complete
     ```
 
-> oc 명령어 자동완성
+### 3.4.2 oc command bash completion
+
+oc 명령어에 자동완성 기능을 추가한다.
+
 ```docker
 # Bash completion 코드를 파일에 저장
 oc completion bash > oc_bash_completion
 # 파일을 /etc/bash_completion.d/.로 복사
 sudo cp oc_bash_completion /etc/bash_completion.d/
-# 셸을 새로 연다
-bash
 ```
 
-#### Web console에 Login
+### 3.4.3 Web console에 Login
 
 Web console은 Helper node에서만 login이 가능하다. 따라서 helpernode에 그래픽 인터페이스인 GNOME을 설치한다.
 
@@ -613,11 +589,7 @@ yum grouplist -v
 sudo yum groupinstall -y "GNOME Desktop"
 ```
 
-#### 기본적인 openshift setting
-
-> OCP의 RABC
-
-![service account](https://github.com/FalcoN1995/project6/blob/master/images/3.5.1.png)
+### 3.4.5 기본적인 openshift setting
 
 1. project 만들기
 2. user 만들기
@@ -676,14 +648,12 @@ sudo yum groupinstall -y "GNOME Desktop"
     oc whoami
     ```
 
+![service account](https://github.com/FalcoN1995/project6/blob/master/images/3.5.1.png)
+
 # 4. Service Introduction
 
-Openshift의 prometheu의 metirc값으로 사용량을 측정하고 PaaS의 사용량을 토대로 비용계산을 하여 자동으로 pdf 고지서를 만드는 서비스를 개발한다.
-
-## 서비스 아키텍처
-
+Openshift의 Prometheus의 metirc값으로 사용량을 측정하고 PaaS의 사용량을 토대로 비용계산을 하여 자동으로 고지서를 만드는 서비스 개발
 ![service architecture](https://github.com/FalcoN1995/project6/blob/master/images/4.0.png)
-
 
 # 5. 서비스 구축 과정
 
@@ -703,7 +673,7 @@ CentOS를 기반으로하는 미리 빌드 된 minimal notebook 버전은 quay.i
 oc create -f https://raw.githubusercontent.com/jupyter-on-openshift/jupyter-notebooks/master/image-streams/s2i-minimal-notebook.json
 ```
 
-### 5.1.2 Making Mnimal Notebook
+### 5.1.2 Making MInimal Notebook
 
 1. Openshift 클러스터의 소스 코드에서 minimal notebook 이미지를 빌드한다.
 
