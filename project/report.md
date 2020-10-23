@@ -615,7 +615,7 @@ sudo yum groupinstall -y "GNOME Desktop"
 
 #### 기본적인 openshift setting
 
-> OCP의 RABC
+> OCP의 RBAC
 
 ![service account](https://github.com/FalcoN1995/project6/blob/master/images/3.5.1.png)
 
