@@ -8,16 +8,16 @@
     3. [Worker](#23-worker)<br>
     4. [Bastion](#24-bastion)<br>
     5. [HAProxy](#25-haproxy)<br>
-    6. [PXE](#26-pxe)<br>
-        1. [DNS](#261-dns)<br>
-        2. [DHCP](#262-dhcp)<br>
-        3. [TFTP](#263-tftp)<br>
+    6. [DNS](#26-dns)<br>
+    7. [PXE](#27-pxe)<br>
+        1. [DHCP](#271-dhcp)<br>
+        2. [TFTP](#272-tftp)<br>
 3. [Helper Node를 이용한 Bare-metal에 클러스터 구축](#3-helper-node를-이용한-bare-metal에-클러스터-구축)<br>
     1. [Helper Node](#31-helper-node)<br>
     2. [구축 절차 오류 과정](#32-구축-절차-오류-과정)<br>
         1. [Bare-metal에 구축 불가](#321-bare-metal에-구축-불가)<br>
         2. [Wi-Fi 접속 불가](#322-wi-fi-접속-불가)<br>
-        3. [DHCP Issue](#323-dhcp-issue)<br>
+        3. [DHCP 서버: 공유기 vs Helper](#323-dhcp-서버-공유기-vs-helper)<br>
         4. [KVM Bridge Issue](#324-kvm-bridge-issue)<br>
         5. [DNS Issue](#325-dns-issue)<br>
     3. [최종 구축 과정](#33-최종-구축-과정)<br>
@@ -54,7 +54,7 @@
 
 Red Hat OpensShift Container Platform
 
-하이브리드 클라우드로, 더 나은 애플리케이션을 더 빠르게 빌드하고 제공하기 위한 기업형 쿠버네티스 기반의 플랫폼
+하이브리드 클라우드로, 더 나은 애플리케이션을 더 빠르게 빌드하고 제공하기 위한 기업형 쿠버네티 플랫폼
 
 ![openshift architecture](https://github.com/FalcoN1995/project6/blob/master/images/1.png)
 
@@ -118,17 +118,16 @@ OCP는 Master 노드에 필요한 정보를 제공하기 위한 초기 설정동
 
  OpenShift Load Balance 노드는 Keepalived와 HAProxy 라우터와 같은 로드밸런싱 서비스를 작동시킨다. HAProxy 라우터는 OpenShift 애플리케이션에 라우팅 기능을 제공한다. 최근에는 Server Name Indication (SNI)를 이용한 HTTP(S) 트래픽과 TLS-enabled 트래픽을 지원한다. OpenShift Load Balance 노드에 추가적인 애플리케이션과 서비스를 배포될 수 있다. OpenShift Load Balance 노드는 RHEL 8.1 서버를 실행한다.
 
-## 2.6 PXE
+## 2.6 DNS
 
-< Preboot Execution Environment >
+OCP에서 DNS 서버의 역할은 중요하다. 일반적으로 IP 주소가 변경될 경우가 거의 없는 가상 머신과 달리, 컨테이너는 짧은 라이프사이클이 순환할 때마다 IP 주소가 변경되어 특정하기 어렵다. 따라서 클러스터 내부 객체 간 내부 통신에 IP 주소가 아닌 변하지 않는 호스트 이름으로 통신한다. 동적 DNS를 사용하기 때문에 서비스 개체가 재생성될 때마다 DNS가 새 레코드로 업데이트한다. 이 기능을 사용하여 각 서비스 개체 호스트 이름은 고유하고 동적인 서비스 IP 주소를 갖는다.
+
+## 2.7 PXE
+
+< Preboot Execution Environment ><br>
 로컬 드라이브에서 부팅하는 대신 네트워크에서 노드를 부팅하는 방법이다.PXE 네트워크 부팅은 클라이언트-서버 프로토콜을 사용하여 수행된다.
 
-### 2.6.1 DNS
-
-< Domain Name Service ><br>
-OCP에서 
-
-### 2.6.2 DHCP
+### 2.7.1 DHCP
 
 < Dynamic Host Configuration Protocol > <br>
 DHCP 서버는 클라이언트에 IP 네트워크 구성을 제공한다. 명세된 IP 대역 내 pool 범위에서 IP 주소를 클라이언트에 임대해준다.
@@ -137,7 +136,7 @@ PXE의 경우 부팅 파일을 다운로드할 서버의 IP 주소를 포함하�
 클라이언트는 네트워크 구성을 요청하는 브로드 캐스트 형식으로 'discover'패킷을 보내고, DHCP 서버가 이 패킷을 수신받는다.
 DHCP 서버에서 클라이언트로 'offer'패킷이 전송된다. 'offer'를 분석 한 후 클라이언트에는 IP 주소, 서브넷 마스크 등과 같은 네트워크 매개 변수가 할당된다.
 
-### 2.6.3 TFTP
+### 2.7.2 TFTP
 
 < Trivial File Transfer Protocol > <br>
 TFTP는 인증이나 권한 부여가 없는 FTP(File Transfer Protocol)의 기본 경량 버전이다. 파일을 가져오거나 보내기 위한 간단한 UDP 기반 프로토콜로, 커널과 같이 부팅에 필요한 파일을 불러오는 역할을 한다. 파일을 불러오기 위한 서버로 FTP, HTTP, NFS도 사용 할 수 있다.
@@ -202,10 +201,9 @@ OS가 실행 중인 동안에 접근 가능
 
 Host OS를 올린 이후 노트북에 내장된 무선 네트워크 인터페이스와 드라이버가 맞지 않아 Wi-Fi에 접속 할 수 없었다. 따라서 호환되는 드라이버를 직접 설치해야 했다.
 
-Helper 머신에 OS CentOS여도 상관없어서 먼저 CentOS 시도했으나 driver가 CentOS를 지원안하는 Issue가 존재했다. 내부적인 코드를 변경해서 드라이버 성공적인 설치 이후에도 계속 WIFI 드라이버 죽는 issue가 존재하였다.
+Helper 머신의 운영체제로 CentOS 7 또는 8을 사용하기에 CentOS에 드라이버 설치를 시도했다. 하지만 대여한 노트북의 NIC에 맞는 드라이버가 CentOS를 지원하지 않았다. 따라서 내부적인 코드를 변경, 드라이버 설치는 성공했으나 Wi-Fi 드라이버가 반복적으로 죽어 Wi-Fi에 접속할 수 없었다. 대여 노트북의 NIC와 맞는 드라이버가 Ubuntu에서는 정상적으로 작동하였다. 결국 다른 Node들과 같이 helper Node도 Host OS(Unbuntu) 위에 kvm을 이용해 가상머신으로 구축하기로 변경하였다.
 
-따라서 helper Node도 동시에 Host OS(Unbuntu)를 구축하고 virt-manager를 통한 Helper Node 구축
-
+#### OS 별 드라이버 설치 방법
 > CentOS 8
 
 ```docker
@@ -252,19 +250,17 @@ sudo ./dkms-install.sh
 lsmod | grep 8821
 ```
 
-### 3.2.3 DHCP Issue
+### 3.2.3 DHCP 서버: 공유기 vs Helper
 
-공유기로 유선 및 무선으로 연결하여 네트워크 연결 시 공유기에서 dhcp 역할을 수행함 (Helper Node에 DHCP 구축 시 충돌 또는 인식 불가)
+처음 구상은 모든 공유기의 dhcp 기능을 끄고 Helper Node에 dhcp 서버를 구축하는 방법이었다. 그러나 코로나 사태로 인해 강의 장소가 원경에서 강의장으로 변경되면서, 클러스터 구성 환경이 팀원의 개인집에서 강의장으로 달라졌다. 강의장의 공유기 설정을 변경 할 수 없었기에 다른 방법을 찾아야 했다. 차안으로 공유기가 DHCP 서버 역할을 수행하도록 설정, (Helper Node에 DHCP 서버 동시 구축 시 충돌 또는 인식이 불가), 노드에 정적으로 IP를 넣어 구축하는 방식을 선택했다. 하지만 이 방식은 BIOS 부팅 방식만 가능했고, 앞서 말했듯이 BIOS 부팅이 불가능한 환경이었기에 역시 다른 대책이 필요했다. 가상머신으로 클러스터 구축을 하면서 해결했다.
 
-모든 공유기 dhcp를 끄고 Helper Node에 dhcp를 구축하는 방법이 존재
+### 3.2.4 Ubuntu 물리 네트워크 가상 Bridge 연결 오류
 
-또는 무선 또는 유선으로 연결하고 Static 하게 IP를 넣어 구축하는 방법 존재 (이 방법은 BIOS boot 지원 시만 가능)
+다른 호스트의 가상머신끼리 통신하기 위해 물리 네트워크를 가상 브릿지로 연결해 가상머신에 연결해야 했다. Ubuntu 18.04의 네트워크 설정 netplan과 NetworkManager 두 방법이 충돌, 물리 네트워크를 가상 브릿지로 연결해 가상머신에 연결 할 수 없었다.
 
-### 3.2.4 KVM Bridge Issue (in Ubuntu)
+KVM으로 가상머신 생성 설정에서 물리 네트워크를 bridge로 연결하는 설정을 이용해 해결하였다.
 
-Ubuntu OS에 익숙하지 않아 벌어진 Issue
-
-> 방법1
+> netplan yaml파일로 네트워크 설정
 
 ```docker
 sudo apt-get install net-tools
@@ -302,12 +298,10 @@ sudo virsh net-autostart br0
 sudo virsh net-list -all
 ```
 
-> 방법2
-
-KVM 안에서 발생하는 bridge
-
 ### 3.2.5 DNS Issue
 
+Helper의 웹 서버에 Ignition config 파일과 구축에 필요한 파일들이 저장되어 있
+Helper에 dns 주소를 8.8.8.8과 같이 외부 주소로 설정했을 때 PXE 부팅 과정에서 Node 구축에 필요한 설정과 파일을 읽어오지 못하는 문제가 있었다. Node들은 부팅 과정에서 Helper를 바라보고 dns 주소를 따라 구성을 시도한다. 기에 Helper의 DNS 주소를 Helper의 IP 주소로 설정하여 해결하였다. 
 공유기가 이전 DHCP 역할로 앞 단에서 역할을 실행했듯이 DNS도 앞단에서 공유기가 DNS 역할을 함으로 인식이 되지 않음
 
 따라서 내부적으로 config 파일 수정하여 DNS를 helper node로 수정
