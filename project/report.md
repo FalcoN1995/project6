@@ -125,12 +125,12 @@ OCP는 Master 노드에 필요한 정보를 제공하기 위한 초기 설정동
 
 ### 2.6.1 DNS
 
-< Domain Name Service >
+< Domain Name Service ><br>
 OCP에서 
 
 ### 2.6.2 DHCP
 
-< Dynamic Host Configuration Protocol >
+< Dynamic Host Configuration Protocol ><br>
 DHCP 서버는 클라이언트에 IP 네트워크 구성을 제공한다. 명세된 IP 대역 내 pool 범위에서 IP 주소를 클라이언트에 임대해준다.
 PXE의 경우 부팅 파일을 다운로드할 서버의 IP 주소를 포함하는 옵션.
 
@@ -139,7 +139,7 @@ DHCP 서버에서 클라이언트로 'offer'패킷이 전송된다. 'offer'를 �
 
 ### 2.6.3 TFTP
 
-< Trivial File Transfer Protocol >
+< Trivial File Transfer Protocol ><br>
 TFTP는 인증이나 권한 부여가 없는 FTP(File Transfer Protocol)의 기본 경량 버전이다. 파일을 가져오거나 보내기 위한 간단한 UDP 기반 프로토콜로, 커널과 같이 부팅에 필요한 파일을 불러오는 역할을 한다. 파일을 불러오기 위한 서버로 FTP, HTTP, NFS도 사용 할 수 있다.
 
 # 3. Helper Node를 이용한 Bare-Metal에 클러스터 구축
