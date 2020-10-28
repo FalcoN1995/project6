@@ -300,11 +300,7 @@ sudo virsh net-list -all
 
 ### 3.2.5 DNS Issue
 
-Helper의 웹 서버에 Ignition config 파일과 구축에 필요한 파일들이 저장되어 있
-Helper에 dns 주소를 8.8.8.8과 같이 외부 주소로 설정했을 때 PXE 부팅 과정에서 Node 구축에 필요한 설정과 파일을 읽어오지 못하는 문제가 있었다. Node들은 부팅 과정에서 Helper를 바라보고 dns 주소를 따라 구성을 시도한다. 기에 Helper의 DNS 주소를 Helper의 IP 주소로 설정하여 해결하였다. 
-공유기가 이전 DHCP 역할로 앞 단에서 역할을 실행했듯이 DNS도 앞단에서 공유기가 DNS 역할을 함으로 인식이 되지 않음
-
-따라서 내부적으로 config 파일 수정하여 DNS를 helper node로 수정
+Helper의 웹 서버에 Ignition config 파일과 구축에 필요한 파일들(커널 등)이 저장되어 있다. Helper에 dns 주소를 8.8.8.8과 같이 외부 주소로 설정했을 때 PXE 부팅 과정에서 Node 구축에 필요한 설정과 파일을 읽어오지 못하는 문제가 발생했다. Node들은 부팅 과정에서 Helper를 바라보고 dns 주소를 따라 구성을 시도하기 때문이었다. 따라서 Helper의 DNS 주소를 Helper의 IP 주소로 설정하여 해결하였다.
 
 ## 3.3 최종 구축 과정&결과
 
