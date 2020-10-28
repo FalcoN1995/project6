@@ -12,7 +12,6 @@
         1. [DNS](#261-dns)<br>
         2. [DHCP](#262-dhcp)<br>
         3. [TFTP](#263-tftp)<br>
-        4. [FTP, HTTP, NFS](#264-ftp-http-nfs)<br>
 3. [Helper Node를 이용한 Bare-metal에 클러스터 구축](#3-helper-node를-이용한-bare-metal에-클러스터-구축)<br>
     1. [Helper Node](#31-helper-node)<br>
     2. [구축 절차 오류 과정](#32-구축-절차-오류-과정)<br>
@@ -121,13 +120,27 @@ OCP는 Master 노드에 필요한 정보를 제공하기 위한 초기 설정동
 
 ## 2.6 PXE
 
+< Preboot Execution Environment >
+로컬 드라이브에서 부팅하는 대신 네트워크에서 노드를 부팅하는 방법이다.PXE 네트워크 부팅은 클라이언트-서버 프로토콜을 사용하여 수행된다.
+
 ### 2.6.1 DNS
+
+< Domain Name Service >
+OCP에서 
 
 ### 2.6.2 DHCP
 
+< Dynamic Host Configuration Protocol >
+DHCP 서버는 클라이언트에 IP 네트워크 구성을 제공한다. 명세된 IP 대역 내 pool 범위에서 IP 주소를 클라이언트에 임대해준다.
+PXE의 경우 부팅 파일을 다운로드할 서버의 IP 주소를 포함하는 옵션.
+
+클라이언트는 네트워크 구성을 요청하는 브로드 캐스트 형식으로 'discover'패킷을 보내고, DHCP 서버가 이 패킷을 수신받는다.
+DHCP 서버에서 클라이언트로 'offer'패킷이 전송된다. 'offer'를 분석 한 후 클라이언트에는 IP 주소, 서브넷 마스크 등과 같은 네트워크 매개 변수가 할당된다.
+
 ### 2.6.3 TFTP
 
-### 2.6.4 FTP, HTTP, NFS
+< Trivial File Transfer Protocol >
+TFTP는 인증이나 권한 부여가 없는 FTP(File Transfer Protocol)의 기본 경량 버전이다. 파일을 가져오거나 보내기 위한 간단한 UDP 기반 프로토콜로, 커널과 같이 부팅에 필요한 파일을 불러오는 역할을 한다. 파일을 불러오기 위한 서버로 FTP, HTTP, NFS도 사용 할 수 있다.
 
 # 3. Helper Node를 이용한 Bare-Metal에 클러스터 구축
 
