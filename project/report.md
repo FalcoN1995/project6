@@ -15,7 +15,7 @@
         4. [FTP, HTTP, NFS](#264-ftp-http-nfs)<br>
 3. [Helper Node를 이용한 Bare-metal에 클러스터 구축](#3-helper-node를-이용한-bare-metal에-클러스터-구축)<br>
     1. [Helper Node](#31-helper-node)<br>
-    2. [구축 과정 오류](#32-구축-과정-오류)<br>
+    2. [구축 절차 오류 과정](#32-구축-절차-오류-과정)<br>
         1. [Bare-metal에 구축 불가](#321-bare-metal에-구축-불가)<br>
         2. [Wi-Fi 접속 불가](#322-wi-fi-접속-불가)<br>
         3. [DHCP Issue](#323-dhcp-issue)<br>
