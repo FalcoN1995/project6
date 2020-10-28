@@ -1,7 +1,7 @@
 # 보고서
 
 1. [OCP란 무엇인가?](#1-ocp란-무엇인가)<br>
-    [1.1 Red Hat OpenShift의 특징](#11-red-hat-openshift의-특징)<br>
+    1. [Red Hat OpenShift의 특징](#11-red-hat-openshift의-특징)<br>
 2. [OCP 4.5 클러스터 아키텍처](#2-ocp-45-클러스터-아키텍처)<br>
     1. [Bootstrap](#21-bootstrap)<br>
     2. [Master](#22-master)<br>
@@ -10,12 +10,11 @@
     5. [HAProxy](#25-haproxy)<br>
     6. [PXE](#26-pxe)<br>
         1. [DNS](#261-dns)<br>
-        2. [2.6.2 DHCP](#262-dhcp)<br>
-        3. [2.6.3 TFTP](#263-tftp)<br>
-        4. [2.6.4 FTP, HTTP, NFS](#264-ftp-http-nfs)<br>
+        2. [DHCP](#262-dhcp)<br>
+        3. [TFTP](#263-tftp)<br>
 3. [Helper Node를 이용한 Bare-metal에 클러스터 구축](#3-helper-node를-이용한-bare-metal에-클러스터-구축)<br>
-    1. [3.1 Helper Node](#31-helper-node)<br>
-    2. [3.2 구축 과정 오류](#32-구축-과정-오류)<br>
+    1. [Helper Node](#31-helper-node)<br>
+    2. [구축 절차 오류 과정](#32-구축-절차-오류-과정)<br>
         1. [Bare-metal에 구축 불가](#321-bare-metal에-구축-불가)<br>
         2. [Wi-Fi 접속 불가](#322-wi-fi-접속-불가)<br>
         3. [DHCP Issue](#323-dhcp-issue)<br>
@@ -40,17 +39,15 @@
     1. [Jupyter Notebook](#51-jupyter-notebook)<br>
         1. [Importing Minimal Notebook](#511-importing-minimal-notebook)<br>
         2. [Making Minimal Notebook](#512-making-minimal-notebook)<br>
-        [5.1.3 Deploying Minimal Notebook](#513-deploying-minimal-notebook)<br>
-    [5.2 Create the metric](#52-create-the-metric)<br>
-        [5.2.1 Data analysis Using kaggle data](#521-data-analysis-using-kaggle-data)<br>
-    [5.3 Prometheus](#53-prometheus)<br>
-        [5.3.1 Prometheus metric library](#531-prometheus-metric-library)<br>
-        [5.3.2 Prometheus metric extraction](#532-prometheus-metric-extraction)<br>
-        [5.3.3 Install Library](#533-install-library)<br>
-    [5.4 automation](#54-automation)<br>
-    [5.5 metric pdf](#55-metric-pdf)<br>
-    [5.6 merge with watermark](#56-merge-with-watermark)<br>
-    [5.7 gui 환경 설정](#57-gui-환경-설정)<br>
+        3. [Deploying Minimal Notebook](#513-deploying-minimal-notebook)<br>
+    2. [Create the metric](#52-create-the-metric)<br>
+        1. [Data analysis Using kaggle data](#521-data-analysis-using-kaggle-data)<br>
+    3. [Prometheus](#53-prometheus)<br>
+        1. [Prometheus metric library](#531-prometheus-metric-library)<br>
+        2. [Prometheus metric extraction](#532-prometheus-metric-extraction)<br>
+        3. [Install Library](#533-install-library)<br>
+    4. [preprocessing](#54-preprocessing)<br>
+    5. [metric pdf](#55-metric-pdf)<br>
 6. [서비스 시연 결과물](#6-서비스-시연-결과물)
 
 # 1. OCP란 무엇인가?
@@ -123,13 +120,27 @@ OCP는 Master 노드에 필요한 정보를 제공하기 위한 초기 설정동
 
 ## 2.6 PXE
 
+< Preboot Execution Environment >
+로컬 드라이브에서 부팅하는 대신 네트워크에서 노드를 부팅하는 방법이다.PXE 네트워크 부팅은 클라이언트-서버 프로토콜을 사용하여 수행된다.
+
 ### 2.6.1 DNS
+
+< Domain Name Service ><br>
+OCP에서 
 
 ### 2.6.2 DHCP
 
+< Dynamic Host Configuration Protocol ><br>
+DHCP 서버는 클라이언트에 IP 네트워크 구성을 제공한다. 명세된 IP 대역 내 pool 범위에서 IP 주소를 클라이언트에 임대해준다.
+PXE의 경우 부팅 파일을 다운로드할 서버의 IP 주소를 포함하는 옵션.
+
+클라이언트는 네트워크 구성을 요청하는 브로드 캐스트 형식으로 'discover'패킷을 보내고, DHCP 서버가 이 패킷을 수신받는다.
+DHCP 서버에서 클라이언트로 'offer'패킷이 전송된다. 'offer'를 분석 한 후 클라이언트에는 IP 주소, 서브넷 마스크 등과 같은 네트워크 매개 변수가 할당된다.
+
 ### 2.6.3 TFTP
 
-### 2.6.4 FTP, HTTP, NFS
+< Trivial File Transfer Protocol ><br>
+TFTP는 인증이나 권한 부여가 없는 FTP(File Transfer Protocol)의 기본 경량 버전이다. 파일을 가져오거나 보내기 위한 간단한 UDP 기반 프로토콜로, 커널과 같이 부팅에 필요한 파일을 불러오는 역할을 한다. 파일을 불러오기 위한 서버로 FTP, HTTP, NFS도 사용 할 수 있다.
 
 # 3. Helper Node를 이용한 Bare-Metal에 클러스터 구축
 
@@ -143,6 +154,8 @@ OCP는 Master 노드에 필요한 정보를 제공하기 위한 초기 설정동
 ## 3.1 Helper Node
 
 OpenShift 4 클러스터를 구축하기위해 필요한 모든 서비스가 함축된 "All in One" 노드. 플레이북 하나로 간단하게 구축
+
+![helper node architecture](https://github.com/FalcoN1995/project6/blob/master/images/hn.png)
 
 > 최소 요구사항
 > - CentOS/RHEL 7 or 8
@@ -170,7 +183,7 @@ b. UEFI (Unified Extensible Firmware Interface)
 - OS와 플랫폼 펌웨어 사이의 소프트웨어 인터페이스를 정의하는 규격
 - 인텔 사의 EFI(Extensible Firmware Interface) 규격 기반
 
-    [https://lh4.googleusercontent.com/dIRWaMswFEjRYAriD3QaVIaF60cf2DAAmBxuhIqzIhZaHKiOHBdNlQ5IzWyph6c9xOkjUMXT-V4dt42gc-XKkbES_diEXrU2hYUjBbdsqxTnxLX88D0Gjp-1puQTTb12tCo-YbsC](https://lh4.googleusercontent.com/dIRWaMswFEjRYAriD3QaVIaF60cf2DAAmBxuhIqzIhZaHKiOHBdNlQ5IzWyph6c9xOkjUMXT-V4dt42gc-XKkbES_diEXrU2hYUjBbdsqxTnxLX88D0Gjp-1puQTTb12tCo-YbsC)
+![https://lh4.googleusercontent.com/dIRWaMswFEjRYAriD3QaVIaF60cf2DAAmBxuhIqzIhZaHKiOHBdNlQ5IzWyph6c9xOkjUMXT-V4dt42gc-XKkbES_diEXrU2hYUjBbdsqxTnxLX88D0Gjp-1puQTTb12tCo-YbsC](https://lh4.googleusercontent.com/dIRWaMswFEjRYAriD3QaVIaF60cf2DAAmBxuhIqzIhZaHKiOHBdNlQ5IzWyph6c9xOkjUMXT-V4dt42gc-XKkbES_diEXrU2hYUjBbdsqxTnxLX88D0Gjp-1puQTTb12tCo-YbsC)
 
 - EFI는 boot 서비스와 runtime 서비스를 지원
 - boot 서비스
@@ -615,7 +628,7 @@ sudo yum groupinstall -y "GNOME Desktop"
 
 #### 기본적인 openshift setting
 
-> OCP의 RABC
+> OCP의 RBAC
 
 ![service account](https://github.com/FalcoN1995/project6/blob/master/images/3.5.1.png)
 
@@ -678,7 +691,7 @@ sudo yum groupinstall -y "GNOME Desktop"
 
 # 4. Service Introduction
 
-Openshift의 prometheu의 metirc값으로 사용량을 측정하고 PaaS의 사용량을 토대로 비용계산을 하여 자동으로 pdf 고지서를 만드는 서비스를 개발한다.
+Openshift의 Prometheus의 metirc값으로 PaaS의 사용량을 측정하고 이를 토대로 비용을 계산, 자동으로 pdf 고지서를 만드는 서비스를 개발
 
 ## 서비스 아키텍처
 
@@ -812,7 +825,7 @@ API나 웹 콘솔을 통해 OAuth서버의 인증을 요청할 수 있고, OAuth
 
 > Oauth Token 확인
 
-```docker
+```
 oc get --user=user1 oauthaccesstokens
 ```
 
@@ -868,3 +881,10 @@ Oauth Token을 활용하여 prometheus에 접근
     ```python
     pc.custom_query(query="container_cpu_usage_seconds_total")
     ```
+
+## 5.4 preprocessing
+
+## 5.5 metric-pdf
+
+# 6. 서비스 시연 결과물
+![service_bill](https://github.com/FalcoN1995/project6/blob/master/images/bill.png)
