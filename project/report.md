@@ -47,10 +47,8 @@
         1. [Prometheus metric library](#531-prometheus-metric-library)<br>
         2. [Prometheus metric extraction](#532-prometheus-metric-extraction)<br>
         3. [Install Library](#533-install-library)<br>
-    4. [automation](#54-automation)<br>
+    4. [preprocessing](#54-preprocessing)<br>
     5. [metric pdf](#55-metric-pdf)<br>
-    6. [merge with watermark](#56-merge-with-watermark)<br>
-    7. [gui 환경 설정](#57-gui-환경-설정)<br>
 6. [서비스 시연 결과물](#6-서비스-시연-결과물)
 
 # 1. OCP란 무엇인가?
@@ -172,7 +170,7 @@ b. UEFI (Unified Extensible Firmware Interface)
 - OS와 플랫폼 펌웨어 사이의 소프트웨어 인터페이스를 정의하는 규격
 - 인텔 사의 EFI(Extensible Firmware Interface) 규격 기반
 
-    [https://lh4.googleusercontent.com/dIRWaMswFEjRYAriD3QaVIaF60cf2DAAmBxuhIqzIhZaHKiOHBdNlQ5IzWyph6c9xOkjUMXT-V4dt42gc-XKkbES_diEXrU2hYUjBbdsqxTnxLX88D0Gjp-1puQTTb12tCo-YbsC](https://lh4.googleusercontent.com/dIRWaMswFEjRYAriD3QaVIaF60cf2DAAmBxuhIqzIhZaHKiOHBdNlQ5IzWyph6c9xOkjUMXT-V4dt42gc-XKkbES_diEXrU2hYUjBbdsqxTnxLX88D0Gjp-1puQTTb12tCo-YbsC)
+![https://lh4.googleusercontent.com/dIRWaMswFEjRYAriD3QaVIaF60cf2DAAmBxuhIqzIhZaHKiOHBdNlQ5IzWyph6c9xOkjUMXT-V4dt42gc-XKkbES_diEXrU2hYUjBbdsqxTnxLX88D0Gjp-1puQTTb12tCo-YbsC](https://lh4.googleusercontent.com/dIRWaMswFEjRYAriD3QaVIaF60cf2DAAmBxuhIqzIhZaHKiOHBdNlQ5IzWyph6c9xOkjUMXT-V4dt42gc-XKkbES_diEXrU2hYUjBbdsqxTnxLX88D0Gjp-1puQTTb12tCo-YbsC)
 
 - EFI는 boot 서비스와 runtime 서비스를 지원
 - boot 서비스
@@ -814,7 +812,7 @@ API나 웹 콘솔을 통해 OAuth서버의 인증을 요청할 수 있고, OAuth
 
 > Oauth Token 확인
 
-```docker
+```
 oc get --user=user1 oauthaccesstokens
 ```
 
@@ -870,3 +868,10 @@ Oauth Token을 활용하여 prometheus에 접근
     ```python
     pc.custom_query(query="container_cpu_usage_seconds_total")
     ```
+
+## 5.4 preprocessing
+
+## 5.5 metric-pdf
+
+# 6. 서비스 시연 결과물
+![service_bill](https://github.com/FalcoN1995/project6/blob/master/images/bill.png)
