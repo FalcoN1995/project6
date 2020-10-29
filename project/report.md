@@ -965,14 +965,14 @@ dataframe을 정제하는 전처리 과정
     ini_df['network'] = network_metric_object.metric_values.y
     ini_df
     ```
-![dataframe1](https://github.com/FalcoN1995/project6/blob/master/images/dataframe1.png)
+    ![dataframe1](https://github.com/FalcoN1995/project6/blob/master/images/dataframe1.png)
 
 6. 값이 없는 부분 제거
     ```python
     sec_df = ini_df[['ds', 'cpu', 'mem', 'network']].dropna(axis=0)
     sec_df
     ```
-![dataframe2](https://github.com/FalcoN1995/project6/blob/master/images/dataframe2.png)
+    ![dataframe2](https://github.com/FalcoN1995/project6/blob/master/images/dataframe2.png)
 
 7. 시계열을 주 단위로 정의
     ```python
@@ -998,9 +998,9 @@ dataframe을 정제하는 전처리 과정
     sec_df
     ```
     
-![dataframe3](https://github.com/FalcoN1995/project6/blob/master/images/dataframe3.png)
+    ![dataframe3](https://github.com/FalcoN1995/project6/blob/master/images/dataframe3.png)
 
-8. 
+8. ???
     ```python
     cpu_first_data = sec['cpu'][-1:] - ini_df['cpu'][2875]
     cpu_first_data
@@ -1011,7 +1011,7 @@ dataframe을 정제하는 전처리 과정
     table_weekly = pd.pivot_table(ini_df, values = ['cpu', 'mem', 'network'], index=['weekly'], aggfunc = np.mean)
     table_weekly
     ```
-![dataframe4](https://github.com/FalcoN1995/project6/blob/master/images/dataframe4.png)
+    ![dataframe4](https://github.com/FalcoN1995/project6/blob/master/images/dataframe4.png)
     
 10. 모자란 한 달간의 데이터 임의 입력
     ```python
@@ -1027,14 +1027,179 @@ dataframe을 정제하는 전처리 과정
     gen_weekly_data = gen_weekly_data.sort_index()
     gen_weekly_data
     ```
-![dataframe5](https://github.com/FalcoN1995/project6/blob/master/images/dataframe5.png)
+    ![dataframe5](https://github.com/FalcoN1995/project6/blob/master/images/dataframe5.png)
     
 
 ## 5.5 Metric to pdf
 
+0. Prototype
+![prototype](https://github.com/FalcoN1995/project6/blob/master/images/prototype.png)
 
+1. 빈 PDF 생성
+    ```python
+    from reportlab.platypus import SimpleDocTemplate
+    from reportlab.lib.pagesizes import letter
+    
+    fileName = 'pdfTable.pdf'
 
-1. 
+    pdf = SimpleDocTemplate(fileName,pagesize=letter)
+    
+    from reportlab.graphics.charts.piecharts import (
+	Pie
+    )
+    from reportlab.graphics.charts.legends import (
+	Legend
+    )
+    from reportlab.lib.validators import Auto
+    ```
+    
+2. 원 그래프 PDF에 그리기
+    ```python
+    def getPieChart(data1, data2, data3):
+	data = [data1, data2, data3]
+	chart = Pie()
+	chart.data = data
+	chart.x = 50
+	chart.y = 5
+
+	chart.labels = ['cpu_cost','mem_cost','net_cost']
+
+	chart.sideLabels = True
+
+	chart.slices[0].fillColor = colors.red
+	#chart.slices[0].popout = 8
+
+	title = String(
+		50, 110, 
+		'Cost ratio', 
+		fontSize = 12
+	)	
+
+	legend = Legend()
+	legend.x = 220
+	legend.y = 80
+	legend.alignment = 'right' 	
+
+	legend.colorNamePairs = Auto(obj=chart)
+
+	drawing = Drawing(0, 500)
+	drawing.add(title)
+	drawing.add(chart)
+	drawing.add(legend)
+
+	return drawing
+    ```
+
+3. 선 그래프 PDF에 그리기
+   ```python
+   from reportlab.graphics.charts.linecharts import(
+	HorizontalLineChart
+    )
+
+    def getLineChart(title, data, data_max):
+	chart = HorizontalLineChart()
+	chart.data = data
+	chart.x = 5
+	chart.y = 5
+	chart.height = 100
+	chart.width = 150
+
+	chart.categoryAxis.categoryNames = [
+		'week_1', 'week_2', 'week_3', 'week_4'
+	]
+
+	title = String(
+		35, 120, 
+		title +' usage per week', 
+		fontSize = 12
+	)	
+    #cpu y axis range
+	chart.valueAxis.valueMin = 0
+	chart.valueAxis.valueMax = data_max
+	chart.valueAxis.valueStep = round(data_max,2)/5
+	chart.lines[0].strokeWidth = 3.5
+	chart.lines[0].strokeColor = colors.purple
+
+	drawing = Drawing(170, 450) 
+	drawing.add(title)
+	drawing.add(chart)
+	return drawing
+    ```
+
+4. dataframe을 표(이미지 형태)로 저장
+    ```python
+    def get_table(dataframe):
+        table_fig = plt.figure(figsize=(9,2))
+        ax = plt.subplot(111)
+        ax.axis('off')
+        ax.table(cellText=dataframe.values, colLabels=dataframe.columns, bbox=[0,0,1,1])
+        return table_fig
+	
+    from reportlab.graphics.shapes import Drawing
+    from reportlab.lib import colors
+    from reportlab.platypus import Table
+    from reportlab.graphics.shapes import String
+    import matplotlib.pyplot as plt
+    
+    cpu_title = 'cpu'
+    mem_title = 'mem'
+    net_title = 'net'
+
+    cpu_data = [tuple(x for x in gen_weekly_data["cpu"].values.tolist())]
+    mem_data = [tuple(x for x in gen_weekly_data["mem"].values.tolist())]
+    net_data = [tuple(x for x in gen_weekly_data["network"].values.tolist())]
+    
+    #metric value max
+    cpu_max = max(cpu_data[0])
+    mem_max = max(mem_data[0])
+    net_max = max(net_data[0])
+
+    #metric value sum
+    cpu_sum = sum(cpu_data[0]) * 10000
+    mem_sum = sum(mem_data[0]) / 10000
+    net_sum = sum(net_data[0])
+    
+    #total cost
+    total_sum = round(cpu_sum + mem_sum + net_sum)
+
+    pieChart = getPieChart(cpu_sum, mem_sum, net_sum)
+    cpu_lineChart = getLineChart(cpu_title, cpu_data, cpu_max)
+    mem_lineChart = getLineChart(mem_title, mem_data, mem_max)
+    net_lineChart = getLineChart(net_title, net_data, net_max)
+    
+    dataframe_fig = get_table(gen_weekly_data)
+
+    dataframe_fig.savefig('dataframe.png')
+
+    #chart 위치
+    table = Table([
+	[cpu_lineChart,mem_lineChart,net_lineChart]
+    ], 190, 200)
+
+    pie_table = Table([
+	[pieChart]
+    ], 550, 350)
+    ```
+5. ???
+    ```python
+    table.setStyle([
+	#('INNERGRID',(0,0),(-1,-1),1,colors.white),
+	("VALIGN",(0,0),(-1,-1),"BOTTOM"),
+    ("ALIGN",(0,0),(-1,-1),"CENTER"),	
+   ])
+
+   pie_table.setStyle([
+	('INNERGRID',(0,0),(-1,-1),1,colors.transparent),
+	("VALIGN",(0,0),(-1,-1),"BOTTOM"),
+    ("ALIGN",(0,0),(-1,-1),"LEFT"),	
+   ])
+   
+   elems = []
+    elems.extend([table, pie_table])
+    pdf.build(elems)
+    ```
+
+6. 고지서 제목과 내용을 입력한 PDF를 생성하고 그래프 PDF와 병합
     ```python
     from PyPDF2 import PdfFileWriter, PdfFileReader
     import io
