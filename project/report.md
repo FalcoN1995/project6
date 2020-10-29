@@ -870,19 +870,19 @@ Oauth Token을 활용하여 prometheus에 접근
     pc.all_metrics()
     
     [':kube_pod_info_node_count:',
-   ':node_memory_MemAvailable_bytes:sum',
-   'ALERTS',
-   'ALERTS_FOR_STATE',
-   'aggregator_openapi_v2_regeneration_count',
-   'aggregator_openapi_v2_regeneration_duration',
-   'aggregator_unavailable_apiservice',
-   ... 
-   'node_memory_HugePages_Surp',
-   'node_memory_HugePages_Total',
-   'node_memory_Hugepagesize_bytes',
-   'node_memory_Hugetlb_bytes',
-   'node_memory_Inactive_anon_bytes',
- ...]
+    ':node_memory_MemAvailable_bytes:sum',
+    'ALERTS',
+    'ALERTS_FOR_STATE',
+    'aggregator_openapi_v2_regeneration_count',
+    'aggregator_openapi_v2_regeneration_duration',
+    'aggregator_unavailable_apiservice',
+    ... 
+    'node_memory_HugePages_Surp',
+    'node_memory_HugePages_Total',
+    'node_memory_Hugepagesize_bytes',
+    'node_memory_Hugetlb_bytes',
+    'node_memory_Inactive_anon_bytes',
+    ...]
     ```
 
 6. 쿼리문 사용
