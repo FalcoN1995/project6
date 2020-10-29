@@ -837,10 +837,10 @@ Oauth Token을 활용하여 prometheus에 접근
     ```python
     from prometheus_api_client import Metric, MetricsList, PrometheusConnect
     from prometheus_api_client.utils import parse_datetime
-    from datetime import timedelta
-    import os
+    from datetime import timedelta, datetime
 
-    import matplotlb.pyplot as plt
+    import pandas as pd
+    import os
     ```
 
 3. prometheus URL 생성
@@ -852,18 +852,37 @@ Oauth Token을 활용하여 prometheus에 접근
 
     Prometheus url: [http://prometheus-k8s-openshift-monitoring.apps.ocp4.example.com/](http://prometheus-k8s-openshift-monitoring.apps.ocp4.example.com/)
 
-4. prometheus server와 연결
+4. 사용자의 token 저장 스크립트
 
     ```python
-    pc = PrometheusConnect(url=prom_url, headers={"Authorization: "bearer Oauth tocken""}, disable_ssl=True)
+    os.system("oc login -u user1 -p user1")
+    token = os.popen("oc whoami -t")
+    r_token = token.read()
+    print(r_token.rstrip())
+    pc = PrometheusConnect(url=prom_url, headers={"Authorization": "bearer " + r_token.rstrip()}, disable_ssl=True)
     ```
 
     SSL 인증은 하지 않는다.
 
-5. 모든 metric 확인
+5. 모든 metric list
 
     ```python
     pc.all_metrics()
+    
+    [':kube_pod_info_node_count:',
+   ':node_memory_MemAvailable_bytes:sum',
+   'ALERTS',
+   'ALERTS_FOR_STATE',
+   'aggregator_openapi_v2_regeneration_count',
+   'aggregator_openapi_v2_regeneration_duration',
+   'aggregator_unavailable_apiservice',
+   ... 
+   'node_memory_HugePages_Surp',
+   'node_memory_HugePages_Total',
+   'node_memory_Hugepagesize_bytes',
+   'node_memory_Hugetlb_bytes',
+   'node_memory_Inactive_anon_bytes',
+ ...]
     ```
 
 6. 쿼리문 사용
@@ -873,8 +892,59 @@ Oauth Token을 활용하여 prometheus에 접근
     ```
 
 ## 5.4 preprocessing
+dataframe을 정제하는 전처리 과정
+
+1. 
+    ```python
+    start_time = parse_datetime("3d")
+    end_time = parse_datetime("now")
+    chunk_size = timedelta(days=3)
 
 ## 5.5 metric-pdf
+
+
+
+
+```python
+from PyPDF2 import PdfFileWriter, PdfFileReader
+import io
+
+import datetime
+import calendar
+
+now = datetime.datetime.today()
+month = calendar.month_name[now.month]
+
+from reportlab.pdfgen import canvas
+
+pdf_data = io.BytesIO()
+# create a new PDF with Reportlab
+pdf_canvas = canvas.Canvas(pdf_data, pagesize=letter)
+# 제목
+pdf_canvas.setFont('Helvetica', 20)
+pdf_canvas.drawString(200,725,month+" Cloud Usage Bill")
+# 가격 산정 제목
+pdf_canvas.setFont('Helvetica', 18)
+pdf_canvas.drawString(330,270,"< Price Calculation Method >")
+
+pdf_canvas.setFont('Helvetica', 9)
+# CPU 가격 산정 방식
+pdf_canvas.drawString(350,240,"CPU: sum of container cpu usage, dollar per 0.1")
+# Memory 가격 산정 방식
+pdf_canvas.drawString(350,220,"Memory: container memory RSS, dollar per MB")
+# Network 가격 산정 방식
+pdf_canvas.drawString(350,200,"Network: container network transmit bytes total, dollar per MB")
+
+pdf_canvas.setFont('Helvetica', 18)
+pdf_canvas.drawString(350,100,"total cost :  " + str(total_sum) + "won")
+
+#draw image
+pdf_canvas.drawImage('logo.png', x=70, y=30, width=90, height=60)
+pdf_canvas.drawImage('dataframe.png', x=-20, y=300, width=648, height=144)
+pdf_canvas.save()
+
+os.system("rm -rf logo.png dataframe.png")
+```
 
 # 6. 서비스 시연 결과물
 ![service_bill](https://github.com/FalcoN1995/project6/blob/master/images/bill.png)
