@@ -892,15 +892,40 @@ Oauth Token을 활용하여 prometheus에 접근
     ```
 
 ## 5.4 preprocessing
+
 dataframe을 정제하는 전처리 과정
 
-1. 
+1. 추출 데이터의 시계열 지정
     ```python
     start_time = parse_datetime("3d")
     end_time = parse_datetime("now")
     chunk_size = timedelta(days=3)
+    ```
 
+2. 
+    ```python
+    mem_metric_data = pc.get_metric_range_data(
+        "container_memory_rss{namespace='default'}",  # this is the metric name and label config
+        start_time=start_time,
+        end_time=end_time,
+        chunk_size=chunk_size,
+    )
+
+    mem_metrics_object_list = MetricsList(mem_metric_data)
+    
+    mem_metric_object = mem_metrics_object_list[0] # one of the metrics from the list
+
+    mem_metric_object_chunk_list = []
+    
+    for raw_metric in mem_metric_data:
+        mem_metric_object_chunk_list.append(Metric(raw_metric))
+
+    print(mem_metric_object.metric_values.y)
+    ```
+    
+   
 ## 5.5 metric-pdf
+
 
 
 
