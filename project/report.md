@@ -902,7 +902,7 @@ dataframe을 정제하는 전처리 과정
     chunk_size = timedelta(days=3)
     ```
 
-2. 
+2. memory 사용량 metric 추출
     ```python
     mem_metric_data = pc.get_metric_range_data(
         "container_memory_rss{namespace='default'}",  # this is the metric name and label config
@@ -919,57 +919,139 @@ dataframe을 정제하는 전처리 과정
     
     for raw_metric in mem_metric_data:
         mem_metric_object_chunk_list.append(Metric(raw_metric))
+    ```
 
-    print(mem_metric_object.metric_values.y)
+3. cpu 사용량 metric 추출
+    ```python
+    cpu_metric_data = pc.get_metric_range_data(
+        "namespace:container_cpu_usage:sum{namespace='default'}",  # this is the metric name and label config
+        start_time=start_time,
+        end_time=end_time,
+        chunk_size=chunk_size,
+    )
+    
+    cpu_metrics_object_list = MetricsList(cpu_metric_data)
+    
+    cpu_metric_object = cpu_metrics_object_list[0] # one of the metrics from the list
+
+    cpu_metric_object_chunk_list = []
+    
+    for raw_metric in cpu_metric_data:
+        cpu_metric_object_chunk_list.append(Metric(raw_metric))
+    ```
+
+4. network 사용량 metric 추출
+    ```python
+    network_metric_data = pc.get_metric_range_data(
+        "container_network_transmit_bytes_total{namespace='default'}",  # this is the metric name and label config
+        start_time=start_time,
+        end_time=end_time,
+        chunk_size=chunk_size,
+    )
+    
+    network_metrics_object_list = MetricsList(network_metric_data)
+    
+    network_metric_object = network_metrics_object_list[0] # one of the metrics from the list
+
+    network_metric_object_chunk_list = []
+    for raw_metric in network_metric_data:
+        network_metric_object_chunk_list.append(Metric(raw_metric))
+    ```
+5. dataframe 생성
+    ```python
+    ini_df = pd.DataFrame(data = cpu_metric_object.metric_values)
+    ini_df.rename(columns = {"y": "cpu"}, inplace=True)
+    ini_df['mem'] = mem_metric_object.metric_values.y
+    ini_df['network'] = network_metric_object.metric_values.y
+    ini_df
+    ```
+![dataframe1](https://github.com/FalcoN1995/project6/blob/master/images/dataframe1.png)
+
+6. 값이 없는 부분 제거
+    ```python
+    sec_df = ini_df[['ds', 'cpu', 'mem', 'network']].dropna(axis=0)
+    sec_df
+    ```
+![dataframe2](https://github.com/FalcoN1995/project6/blob/master/images/dataframe2.png)
+
+7. 시계열을 주 단위로 정의
+    ```python
+    def get_date(y, m, d):
+        s = f'{y:04d}-{m:02d}-{d:02d}'
+        return datetime.strptime(s, '%Y-%m-%d')
+
+    def get_week_no(df):
+        y = int(df['ds'].year)
+        m = int(df['ds'].month)
+        d = int(df['ds'].day)
+        target = get_date(y,m,d)
+        firstday = target.replace(day=1)
+        if firstday.weekday() == 6:
+            origin = firstday
+        elif firstday.weekday() < 3:
+            origin = firstday - timedelta(days=firstday.weekday() + 1)
+        else:
+            origin = firstday + timedelta(days=6-firstday.weekday())
+        return (target - origin).days // 7 + 1
+
+    sec_df['weekly'] = sec_df.apply(get_week_no, axis=1)
+    sec_df
     ```
     
-   
+![dataframe3](https://github.com/FalcoN1995/project6/blob/master/images/dataframe3.png)
+
+8. 
+    ```python
+    cpu_first_data = sec['cpu'][-1:] - ini_df['cpu'][2875]
+    cpu_first_data
+    ```
+
 ## 5.5 Metric to pdf
 
 
 
 
 
-```python
-from PyPDF2 import PdfFileWriter, PdfFileReader
-import io
+    ```python
+    from PyPDF2 import PdfFileWriter, PdfFileReader
+    import io
 
-import datetime
-import calendar
+    import datetime
+    import calendar
 
-now = datetime.datetime.today()
-month = calendar.month_name[now.month]
+    now = datetime.datetime.today()
+    month = calendar.month_name[now.month]
 
-from reportlab.pdfgen import canvas
+    from reportlab.pdfgen import canvas
 
-pdf_data = io.BytesIO()
-# create a new PDF with Reportlab
-pdf_canvas = canvas.Canvas(pdf_data, pagesize=letter)
-# 제목
-pdf_canvas.setFont('Helvetica', 20)
-pdf_canvas.drawString(200,725,month+" Cloud Usage Bill")
-# 가격 산정 제목
-pdf_canvas.setFont('Helvetica', 18)
-pdf_canvas.drawString(330,270,"< Price Calculation Method >")
+    pdf_data = io.BytesIO()
+    # create a new PDF with Reportlab
+    pdf_canvas = canvas.Canvas(pdf_data, pagesize=letter)
+    # 제목
+    pdf_canvas.setFont('Helvetica', 20)
+    pdf_canvas.drawString(200,725,month+" Cloud Usage Bill")
+    # 가격 산정 제목
+    pdf_canvas.setFont('Helvetica', 18)
+    pdf_canvas.drawString(330,270,"< Price Calculation Method >")
 
-pdf_canvas.setFont('Helvetica', 9)
-# CPU 가격 산정 방식
-pdf_canvas.drawString(350,240,"CPU: sum of container cpu usage, dollar per 0.1")
-# Memory 가격 산정 방식
-pdf_canvas.drawString(350,220,"Memory: container memory RSS, dollar per MB")
-# Network 가격 산정 방식
-pdf_canvas.drawString(350,200,"Network: container network transmit bytes total, dollar per MB")
+    pdf_canvas.setFont('Helvetica', 9)
+    # CPU 가격 산정 방식
+    pdf_canvas.drawString(350,240,"CPU: sum of container cpu usage, dollar per 0.1")
+    # Memory 가격 산정 방식
+    pdf_canvas.drawString(350,220,"Memory: container memory RSS, dollar per MB")
+    # Network 가격 산정 방식
+    pdf_canvas.drawString(350,200,"Network: container network transmit bytes total, dollar per MB")
 
-pdf_canvas.setFont('Helvetica', 18)
-pdf_canvas.drawString(350,100,"total cost :  " + str(total_sum) + "won")
+    pdf_canvas.setFont('Helvetica', 18)
+    pdf_canvas.drawString(350,100,"total cost :  " + str(total_sum) + "won")
 
-#draw image
-pdf_canvas.drawImage('logo.png', x=70, y=30, width=90, height=60)
-pdf_canvas.drawImage('dataframe.png', x=-20, y=300, width=648, height=144)
-pdf_canvas.save()
+    #draw image
+    pdf_canvas.drawImage('logo.png', x=70, y=30, width=90, height=60)
+    pdf_canvas.drawImage('dataframe.png', x=-20, y=300, width=648, height=144)
+    pdf_canvas.save()
 
-os.system("rm -rf logo.png dataframe.png")
-```
+    os.system("rm -rf logo.png dataframe.png")
+    ```
 
 # 6. 서비스 시연 결과물
 ![service_bill](https://github.com/FalcoN1995/project6/blob/master/images/bill.png)
