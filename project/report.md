@@ -18,8 +18,8 @@
         1. [Bare-metal에 구축 불가](#321-bare-metal에-구축-불가)<br>
         2. [Wi-Fi 접속 불가](#322-wi-fi-접속-불가)<br>
         3. [DHCP 서버: 공유기 vs Helper](#323-dhcp-서버-공유기-vs-helper)<br>
-        4. [KVM Bridge Issue](#324-kvm-bridge-issue)<br>
-        5. [DNS Issue](#325-dns-issue)<br>
+        4. [Ubuntu 물리 네트워크 가상 Bridge 연결 오류](#324-ubuntu-물리-네트워크-가상-bridge-연결-오류)<br>
+        5. [Helper DNS 설정 문제](#325-helper-dns-설정-문제)<br>
     3. [최종 구축 과정](#33-최종-구축-과정)<br>
         1. [물리머신 환경](#331-믈리머신-환경)<br>
         2. [가상머신 환경](#332-가상머신-환경)<br>
@@ -298,7 +298,7 @@ sudo virsh net-autostart br0
 sudo virsh net-list -all
 ```
 
-### 3.2.5 DNS Issue
+### 3.2.5 Helper DNS 설정 문제
 
 Helper의 웹 서버에 Ignition config 파일과 구축에 필요한 파일들(커널 등)이 저장되어 있다. Helper에 dns 주소를 8.8.8.8과 같이 외부 주소로 설정했을 때 PXE 부팅 과정에서 Node 구축에 필요한 설정과 파일을 읽어오지 못하는 문제가 발생했다. Node들은 부팅 과정에서 Helper를 바라보고 dns 주소를 따라 구성을 시도하기 때문이었다. 따라서 Helper의 DNS 주소를 Helper의 IP 주소로 설정하여 해결하였다.
 
