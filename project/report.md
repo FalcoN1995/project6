@@ -1005,13 +1005,36 @@ dataframe을 정제하는 전처리 과정
     cpu_first_data = sec['cpu'][-1:] - ini_df['cpu'][2875]
     cpu_first_data
     ```
+    
+9. 시계열을 주로 묶어 출력
+    ```python
+    table_weekly = pd.pivot_table(ini_df, values = ['cpu', 'mem', 'network'], index=['weekly'], aggfunc = np.mean)
+    table_weekly
+    ```
+![dataframe4](https://github.com/FalcoN1995/project6/blob/master/images/dataframe4.png)
+    
+10. 모자란 한 달간의 데이터 임의 입력
+    ```python
+    fake_metric_data = {
+        'weekly': [1,2,3,4],
+        'cpu': [0.124,0.123, 0.17, 0.19],
+        'mem': [234213142,5552423, 7513246, 8646534],
+        'network': [312432.2134, 123111.8321, 123332.8321, 123556.8321]
+    }
+    fake_metric_df = fake_metric_df.set_index('weekly')
+    
+    gen_weekly_data = table_weekly.append(fake_metric_df)
+    gen_weekly_data = gen_weekly_data.sort_index()
+    gen_weekly_data
+    ```
+![dataframe5](https://github.com/FalcoN1995/project6/blob/master/images/dataframe5.png)
+    
 
 ## 5.5 Metric to pdf
 
 
 
-
-
+1. 
     ```python
     from PyPDF2 import PdfFileWriter, PdfFileReader
     import io
