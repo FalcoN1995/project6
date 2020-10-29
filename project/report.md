@@ -40,14 +40,14 @@
         1. [Importing Minimal Notebook](#511-importing-minimal-notebook)<br>
         2. [Making Minimal Notebook](#512-making-minimal-notebook)<br>
         3. [Deploying Minimal Notebook](#513-deploying-minimal-notebook)<br>
-    2. [Create the metric](#52-create-the-metric)<br>
-        1. [Data analysis Using kaggle data](#521-data-analysis-using-kaggle-data)<br>
+    2. [Metric 생성](#52-metric-생성)<br>
+        1. [Kaggle 데이터를 이용한 데이터 분석](#521-kaggle-데이터를-이용한-데이터-분석)<br>
     3. [Prometheus](#53-prometheus)<br>
         1. [Prometheus metric library](#531-prometheus-metric-library)<br>
         2. [Prometheus metric extraction](#532-prometheus-metric-extraction)<br>
         3. [Install Library](#533-install-library)<br>
-    4. [preprocessing](#54-preprocessing)<br>
-    5. [metric pdf](#55-metric-pdf)<br>
+    4. [Preprocessing](#54-preprocessing)<br>
+    5. [Metric to pdf](#55-metric-to-pdf)<br>
 6. [서비스 시연 결과물](#6-서비스-시연-결과물)
 
 # 1. OCP란 무엇인가?
@@ -750,9 +750,9 @@ oc create -f https://raw.githubusercontent.com/jupyter-on-openshift/jupyter-note
 
 5. 브라우저를 사용하여 호스트 이름에 엑세스하고 위에서 사용한 비밀번호를 입력한다.
 
-## 5.2 Create the metric
+## 5.2 Metric 생성
 
-### 5.2.1 Data analysis Using kaggle data
+### 5.2.1 Kaggle 데이터를 이용한 데이터 분석
 
 1. Titanic Data
     1. Create the Jupyter container in OpenShift 4
@@ -891,7 +891,7 @@ Oauth Token을 활용하여 prometheus에 접근
     pc.custom_query(query="container_cpu_usage_seconds_total")
     ```
 
-## 5.4 preprocessing
+## 5.4 Preprocessing
 
 dataframe을 정제하는 전처리 과정
 
@@ -924,7 +924,7 @@ dataframe을 정제하는 전처리 과정
     ```
     
    
-## 5.5 metric-pdf
+## 5.5 Metric to pdf
 
 
 
